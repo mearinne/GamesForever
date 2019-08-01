@@ -78,86 +78,32 @@ public class Movement : MonoBehaviour
         float yCurrentPosition = currentRobotPosition.y;
         if(xFinalPosition < xCurrentPosition)
         {
-            if (currentRotationAngle > 170)
+            if (currentRotationAngle < 170)
             {
                 flipLeft = true;
                 flipRight = false;
-
-                if (yFinalPosition > yCurrentPosition)
-                {
-                    rotateUpLeft = true;
-                    rotateDownLeft = false;
-                    rotateDownRight = false;
-                    rotateUpRight = false;
-                }
-                if (yFinalPosition < yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = true;
-                    rotateDownRight = false;
-                    rotateUpRight = false;
-                }
             }
             else
             {
                 flipRight = false;
                 flipLeft = false;
-                if (yFinalPosition > yCurrentPosition)
-                {
-                    rotateUpLeft = true;
-                    rotateDownLeft = false;
-                    rotateDownRight = false;
-                    rotateUpRight = false;
-                }
-                if (yFinalPosition < yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = true;
-                    rotateDownRight = false;
-                    rotateUpRight = false;
-                }
+               
             }
 
         }   
         if(xFinalPosition > xCurrentPosition)
         {
-            if (currentRotationAngle < 180)
+            if (currentRotationAngle > 170)
             {
                 flipRight = true;
                 flipLeft = false;
-                if (yFinalPosition > yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = false;
-                    rotateDownRight = false;
-                    rotateUpRight = true;
-                }
-                if (yFinalPosition < yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = false;
-                    rotateDownRight = true;
-                    rotateUpRight = false;
-                }
+               
             }
             else
             {
                 flipRight = false;
                 flipLeft = false;
-                if (yFinalPosition > yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = false;
-                    rotateDownRight = false;
-                    rotateUpRight = true;
-                }
-                if (yFinalPosition < yCurrentPosition)
-                {
-                    rotateUpLeft = false;
-                    rotateDownLeft = false;
-                    rotateDownRight = true;
-                    rotateUpRight = false;
-                }
+                
             }
                 
         }
@@ -175,23 +121,25 @@ public class Movement : MonoBehaviour
             float timeSinceStarted = Time.time - timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
             robot.transform.position = Vector3.Lerp(currentRobotPosition, finalPosition, percentageComplete);
+
             if (percentageComplete >= 1f)
             {
                 isLerping = false;
             }
             if (flipRight)
             {
-                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
+                
+                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
             }
             if (flipLeft)
             {
-                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
+               
+                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
+
             }
-            if (rotateUpRight && flipLeft)
-            {
-                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, -45)), percentageComplete*rotationSpeed);
-            }
+         
             
+
 
         }
     }
