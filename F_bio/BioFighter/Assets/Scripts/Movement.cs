@@ -22,6 +22,8 @@ public class Movement : MonoBehaviour
     private float timeStartedLerping;
     private float currentRotationAngle;
     private float z_rotationAngle;
+    float zCurrentRobotAngle;
+    float angle;
     private bool isLerping;
     private bool flipLeft;
     private bool flipRight;
@@ -34,6 +36,7 @@ public class Movement : MonoBehaviour
 
     Vector3 currentRobotPosition;
     Vector3 finalPosition;
+    Vector3 finalPositionInNatura;
 
 
 
@@ -60,6 +63,7 @@ public class Movement : MonoBehaviour
             {
                 Vector3 newPos = hit.point;
                 finalPosition = new Vector3(newPos.x,newPos.y,zAxe);
+                finalPositionInNatura = new Vector3(newPos.x, newPos.y, newPos.z);
 
                 StartLerping();
             }         
@@ -76,7 +80,8 @@ public class Movement : MonoBehaviour
         float xCurrentPosition = currentRobotPosition.x;
         float yFinalPosition = finalPosition.y;
         float yCurrentPosition = currentRobotPosition.y;
-        if(xFinalPosition < xCurrentPosition)
+        zCurrentRobotAngle = robot.transform.localEulerAngles.z;
+        if (xFinalPosition < xCurrentPosition)
         {
             if (currentRotationAngle < 170)
             {
@@ -107,15 +112,29 @@ public class Movement : MonoBehaviour
             }
                 
         }
-        print("yFinalPosition " + yFinalPosition);
-        print("yCurrentPosition" + yCurrentPosition);
-        print("xFinalPosition " + xFinalPosition);
-        print("xCurrentPosition" + xCurrentPosition);
+        /*  print("yFinalPosition " + yFinalPosition);
+          print("yCurrentPosition" + yCurrentPosition);
+          print("xFinalPosition " + xFinalPosition);
+          print("xCurrentPosition" + xCurrentPosition);*/
+        print(finalPositionInNatura.z);
+        // robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, xCurrentPosition)), Quaternion.Euler(new Vector3(0, 0, xFinalPosition)), 5);
+        float distance  = Vector3.Distance(robot.transform.position,finalPosition);
+        float osaX = finalPosition.x - robot.transform.position.x;
+        float osaY = finalPosition.y - robot.transform.position.y;
+        print("vzdalenost od bodu kliknuti mysi"+distance);
+        print("delka strany A: " + osaX);
+        print("delka strany B: " + osaY);
 
+        angle = Mathf.Atan2(finalPosition.y - robot.transform.position.y, finalPosition.x - robot.transform.position.x) * 180 / Mathf.PI;
+        print("úhel máme: "+angle);
+        
+        
     }
 
     private void FixedUpdate()
     {
+
+
         if (isLerping)
         {
             float timeSinceStarted = Time.time - timeStartedLerping;
@@ -129,16 +148,16 @@ public class Movement : MonoBehaviour
             if (flipRight)
             {
                 
-                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
+                //robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
             }
             if (flipLeft)
             {
                
-                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
+                //robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
 
             }
-         
-            
+
+            robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(0, 0, zCurrentRobotAngle), Quaternion.Euler(0, 0, angle), percentageComplete);
 
 
         }
