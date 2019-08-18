@@ -16,12 +16,12 @@ public class shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       /* if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
             StopCoroutine("shoot");
             StartCoroutine("shoot");
-        }*/
-
+        }
+        print(Movement.wasShooted);
     }
 
     public IEnumerator shoot()
@@ -35,10 +35,18 @@ public class shooting : MonoBehaviour
             if(Physics.Raycast(ray, out rayHit, 100))
             {
                 laser.SetPosition(1, rayHit.point);
+                if(rayHit.transform.tag == "Enemy")
+                {
+                    print("zasah nepritele");
+                    Movement.wasShooted = true;
+                }
+               
             }
             else
             {
-                laser.SetPosition(1, ray.GetPoint(100));
+                laser.enabled = false;
+                //laser.SetPosition(1, ray.GetPoint(100));
+                Movement.wasShooted = false;
             }
 
 

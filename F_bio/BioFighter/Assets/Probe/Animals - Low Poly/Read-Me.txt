@@ -1,0 +1,18 @@
+Thanks for purchase!
+
+This package is under in development and contains 3 Animals Models, for you use in your Games or Projects!
+
+- FBX File Format
+- Texture with Difuse Color
+
+INSTRUCTIONS
+
+-Import the FBX model in your project
+-Put the texture in Model
+
+More models?
+www.imersastudios.itch.io
+
+You live in our heart!
+
+<3

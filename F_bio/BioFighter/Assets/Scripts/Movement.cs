@@ -31,6 +31,7 @@ public class Movement : MonoBehaviour
     private bool rotateDownRight;
     private bool rotateUpLeft;
     private bool rotateDownLeft;
+    public static bool wasShooted = false;
     
     Quaternion rotate;
 
@@ -53,19 +54,21 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {    
             Ray r2 = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
-            RaycastHit hit;
+               
 
             if (Physics.Raycast(r2, out hit))
             {
                 Vector3 newPos = hit.point;
                 finalPosition = new Vector3(newPos.x,newPos.y,zAxe);
                 finalPositionInNatura = new Vector3(newPos.x, newPos.y, newPos.z);
-
-                StartLerping();
+               
+                
+                    StartLerping();
+                
+                
             }         
         } 
     }
@@ -121,12 +124,12 @@ public class Movement : MonoBehaviour
         float distance  = Vector3.Distance(robot.transform.position,finalPosition);
         float osaX = finalPosition.x - robot.transform.position.x;
         float osaY = finalPosition.y - robot.transform.position.y;
-        print("vzdalenost od bodu kliknuti mysi"+distance);
-        print("delka strany A: " + osaX);
-        print("delka strany B: " + osaY);
+        //print("vzdalenost od bodu kliknuti mysi"+distance);
+        //print("delka strany A: " + osaX);
+        //print("delka strany B: " + osaY);
 
         angle = Mathf.Atan2(finalPosition.y - robot.transform.position.y, finalPosition.x - robot.transform.position.x) * 180 / Mathf.PI;
-        print("úhel máme: "+angle);
+        //print("úhel máme: "+angle);
         
         
     }
@@ -139,7 +142,15 @@ public class Movement : MonoBehaviour
         {
             float timeSinceStarted = Time.time - timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
-            robot.transform.position = Vector3.Lerp(currentRobotPosition, finalPosition, percentageComplete);
+            if (!wasShooted)
+            {
+                if (hit.transform.tag != "Enemy")
+                {
+                    robot.transform.position = Vector3.Lerp(currentRobotPosition, finalPosition, percentageComplete);
+                }
+                    
+                
+            }
 
             if (percentageComplete >= 1f)
             {
@@ -148,12 +159,12 @@ public class Movement : MonoBehaviour
             if (flipRight)
             {
                 
-                //robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
+                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 180, 0)), Quaternion.Euler(new Vector3(0, 0, 0)), percentageComplete);
             }
             if (flipLeft)
             {
                
-                //robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
+                robot.transform.rotation = Quaternion.Slerp(Quaternion.Euler(new Vector3(0, 0, 0)), Quaternion.Euler(new Vector3(0, 180, 0)), percentageComplete);
 
             }
 
